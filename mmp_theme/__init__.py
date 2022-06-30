@@ -1,2 +1,3 @@
-import mmp_theme
-import mmp_plot
+from .mmp_theme import *
+from .mmp_plot import *
+
