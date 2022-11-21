@@ -8,7 +8,7 @@ import base64
 from plotly.subplots import make_subplots
 import pandas as pd
 import plotly.graph_objects as go
-from mmp_theme import *  # FIXME: only for developing
+# from mmp_theme import *  # FIXME: only for developing
 
 ##############################
 ## LIST OF INPUT PARAMETERS ##
@@ -42,7 +42,7 @@ additional_params = {'title': 'Plot title (str, optional)',
                      'width': 'Figure width (int, optional, default=1500 px, if \'size\' is used, this parameter is ignored)',
                      'height': 'Figure height (int, optional, default=900 px, if \'size\' is used, this parameter is ignored)',
                      'size': 'Figure size (str, \'large\': w=1600px, h=1000px, \'medium\': w=1100px, h=800px, \'small\': w=900px, h=600px)',
-                     'borders': 'bool, if True, plot border is shown (default=False)',
+                     'borders': 'Bool, if True, plot border is shown (default=False)',
                      'colorbar_title': 'Colorbar title (str, optional, if applicable)',
                      'mode': 'Sets mode for line plots (str, \'lines\', \'lines+markers\', \'markers\', default=\'lines\', only for kind=\'line\'',
                      'line_style': 'Sets style of line traces (str, \'solid\', \'dash\', \'dot\', or any accepted by line_dash property of plotly scatter traces, default=\'solid\', only for kind=\'line\'',
@@ -53,7 +53,8 @@ additional_params = {'title': 'Plot title (str, optional)',
                      'marker_size': 'Sets size of markers (int, only for kind=\'line\', \'scatter\')',
                      'marker_alpha': 'Sets opacity of markers (int between or equal to 0 and 1, only for kind=\'line\', \'scatter\')',
                      'quartilemethod': 'Method to compute quartiles (str, \'exclusive\', \'inclusive\', \'linear\', only for kind=\'box\')',
-                     'barmode': 'Sets how bars at the same location are displayed (str, \'stack\', \'relative\', \'group\', default=\'overlay\')'
+                     'barmode': 'Sets how bars at the same location are displayed (str, \'stack\', \'relative\', \'group\', default=\'overlay\')',
+                     'subplots': 'Bool, if True, columns of data are plotted in a different subplot'
                      }
 
 

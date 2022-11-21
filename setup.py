@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='mmp_theme',
-    version='1.2.1',
+    version='2.0',
     packages=['mmp_theme'],
     license='MIT',
     description='Custom theme and functions for MMP plots',
@@ -18,7 +18,6 @@ setuptools.setup(
     url='https://source.cloud.google.com/mmp-vm/utility_repo/+/master:mmp_theme/',
     install_requires=['requests'],
     
-#    download_url="https://github.com/giulia-mmp/mmp_theme/archive/refs/tags/v1.2.1.tar.gz"
     download_url="https://github.com/giulia-mmp/mmp_theme/archive/refs/tags/v2.0.tar.gz"
     
 )
