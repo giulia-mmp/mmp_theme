@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 ##############################
 ## LIST OF INPUT PARAMETERS ##
 ##############################
-input_params = {'data': 'DataFrame with data to be plot',
+input_params = {'data': 'DataFrame with data to be plot. MultiIndex in columns is allowed only if subplots=True.',
                 'kind': 'Type of plot. Implemented type are: \'line\', \'scatter\', \'bar\', \'imshow\', \'scatter3d\', \'box\', \'hist\'',
                 'x': 'Name of the dataframe column to be used on the x-axis (if None, data.index is used)',
                 'y': 'Name of the dataframe column to be used on the y-axis (if None, data.columns is used)',
@@ -21,7 +21,8 @@ input_params = {'data': 'DataFrame with data to be plot',
                 'show': 'bool, if True, the plot is shown',
                 'main_logo_source': 'str, url or path for main logo',
                 'proj_logo_source': 'str, url or path for additional project logo',
-                '**plot_fun_keywords': 'The function accepts all the allowed plotly parameters for the plot chosen in \'kind\'',
+                'subplots': 'Bool, if True, columns of data are plotted in a different subplot.',
+                '**plot_fun_keywords': 'The function accepts all the allowed plotly express parameters for the plot chosen in \'kind\' (only if subplots=False)',
                 '**additional_parameters': 'Hardcoded layout and traces parameters. See dict \'additional_params\''
                 }
 
@@ -30,31 +31,35 @@ input_params = {'data': 'DataFrame with data to be plot',
 #################################
 additional_params = {'title': 'Plot title (str, optional)',
                      'xlabel': 'Label of x-axis (str, optional)',
-                     'ylabel': 'Label of y-axis (str, optional)',
+                     'ylabel': 'Label of y-axis (str, optional. List of str of len<=nr_subplots, if subplots=True)',
                      'zlabel': 'Label of z-axis (str, optional, only for 3D plots)',
                      'xlim': 'Limits on x-axis (list: [xmin, xmax], optional)',
                      'ylim': 'Limits on y-axis (list: [ymin, ymax], optional)',
                      'legend_title': 'Legend title (str, optional)',
                      'legend_location': 'Legend position (str, optional, \'innerNW\', \'innerNE\', \'innerSW\', \'innerSE\', \'outerW\', default=\'outerE\')',
                      'legend_borders': 'bool, il True, legend border is shown (default=False)',
-                     # 'legend_bordercolor': 'Sets the color of the legend border (str, namd CSS color, or any accepted by bordercolor property of plotly legend graph object, default=None)',
-                     # 'legend_borderwidth': 'Sets width of legend border (int, default=1 px)',
                      'width': 'Figure width (int, optional, default=1500 px, if \'size\' is used, this parameter is ignored)',
                      'height': 'Figure height (int, optional, default=900 px, if \'size\' is used, this parameter is ignored)',
                      'size': 'Figure size (str, \'large\': w=1600px, h=1000px, \'medium\': w=1100px, h=800px, \'small\': w=900px, h=600px)',
                      'borders': 'Bool, if True, plot border is shown (default=False)',
                      'colorbar_title': 'Colorbar title (str, optional, if applicable)',
-                     'mode': 'Sets mode for line plots (str, \'lines\', \'lines+markers\', \'markers\', default=\'lines\', only for kind=\'line\'',
-                     'line_style': 'Sets style of line traces (str, \'solid\', \'dash\', \'dot\', or any accepted by line_dash property of plotly scatter traces, default=\'solid\', only for kind=\'line\'',
-                     'line_color': 'Sets color of line traces (str, named CSS color, or any accepted by line_color property of plotly scatter traces, only for kind=\'line\')',
-                     'line_width': 'Sets width of line traces (int, default=2 px, only for kind=\'line\')',
-                     'line_shape': 'Sets the shape of the line (str, \'spline\': spline interpolation is used, \'steps-pre\', \'steps-post\', \'steps-mid\' correspond to step plots, default=\'linear\')',
-                     'marker_color': 'Sets color of markers (str, named CSS color, or any accepted by line_color property of plotly scatter traces, only for kind=\'line\', \'scatter\')',
-                     'marker_size': 'Sets size of markers (int, only for kind=\'line\', \'scatter\')',
-                     'marker_alpha': 'Sets opacity of markers (int between or equal to 0 and 1, only for kind=\'line\', \'scatter\')',
+                     'mode': 'Sets mode for line plots (str, \'lines\', \'lines+markers\', \'markers\', default=\'lines\', only for kind=\'line\'. List of str of len<=nr_subplots, if subplots=True)',
+                     'line_style': 'Sets style of line traces (str, \'solid\', \'dash\', \'dot\', or any accepted by line_dash property of plotly scatter traces, default=\'solid\', only for kind=\'line\'. '
+                                   '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'line_color': 'Sets color of line traces (str, named CSS color, or any accepted by line_color property of plotly scatter traces, only for kind=\'line\'.'
+                                   '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'line_width': 'Sets width of line traces (int, default=2 px, only for kind=\'line\'.'
+                                   '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'line_shape': 'Sets the shape of the line (str, \'spline\': spline interpolation is used, \'steps-pre\', \'steps-post\', \'steps-mid\' correspond to step plots, default=\'linear\'.'
+                                   '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'marker_color': 'Sets color of markers (str, named CSS color, or any accepted by line_color property of plotly scatter traces, only for kind=\'line\', \'scatter\'.'
+                                     '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'marker_size': 'Sets size of markers (int, only for kind=\'line\', \'scatter\'.'
+                                    '\nList of str of len<=nr_subplots, if subplots=True)',
+                     'marker_alpha': 'Sets opacity of markers (int between or equal to 0 and 1, only for kind=\'line\', \'scatter\'.'
+                                     '\nList of str of len<=nr_subplots, if subplots=True)',
                      'quartilemethod': 'Method to compute quartiles (str, \'exclusive\', \'inclusive\', \'linear\', only for kind=\'box\')',
                      'barmode': 'Sets how bars at the same location are displayed (str, \'stack\', \'relative\', \'group\', default=\'overlay\')',
-                     'subplots': 'Bool, if True, columns of data are plotted in a different subplot'
                      }
 
 
@@ -185,6 +190,15 @@ def process_params_subplot(param, n_sp, kind):
             traces[sp]['marker_size'] = param['marker_size'][sp]
         if 'marker_alpha' in param:
             traces[sp]['marker_opacity'] = param['marker_alpha'][sp]
+        if 'line_shape' in param:
+            if param['line_shape'][sp] == 'steps-pre':
+                traces[sp]['line_shape'] = 'vh'
+            elif param['line_shape'][sp] == 'steps-post':
+                traces[sp]['line_shape'] = 'hv'
+            elif param['line_shape'][sp] == 'steps-mid':
+                traces[sp]['line_shape'] = 'hvh'
+            else:
+                traces[sp]['line_shape'] = param['line_shape'][sp]
 
     param.pop('mode', None)
     param.pop('line_color', None)
@@ -193,6 +207,7 @@ def process_params_subplot(param, n_sp, kind):
     param.pop('marker_color', None)
     param.pop('marker_size', None)
     param.pop('marker_alpha', None)
+    param.pop('line_shape', None)
 
     # Layout param
     layouts['width'] = param.pop('width', None)
@@ -292,13 +307,11 @@ def set_logos(main_logo_source, proj_logo_source):
     return img_list
 
 
-
 #####################
 ## FNC: INNER PLOT ##
 #####################
 def mmp_inner_plot(plot_fun, data, x, y, z, main_logo_source, proj_logo_source, fun_params, traces_params,
                    layout_params):
-    # pio.templates['mmp_theme'].layout.images[0]['visible'] = mmp_logo
 
     if z is not None:  # 3D
         if plot_fun == px.imshow:
@@ -349,6 +362,10 @@ def mmp_inner_plot(plot_fun, data, x, y, z, main_logo_source, proj_logo_source, 
     return fig
 
 
+
+############################
+## FNC: "PANDAS" SUBPLOTS ##
+############################
 def calc_subplots(data):
     if data.columns.nlevels > 1:
         data = data.sort_index(axis=1, level=list(range(data.columns.nlevels)))
