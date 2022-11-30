@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='mmp_theme',
-    version='2.0',
+    version='2.0.1',
     packages=['mmp_theme'],
     license='MIT',
     description='Custom theme and functions for MMP plots',
