@@ -474,13 +474,14 @@ def mmp_plot(data=None, kind='line', x=None, y=None, z=None, show=True, main_log
 
         fig = mmp_inner_subplot(data, x, main_logo_source, proj_logo_source, traces_params, layout_params, axes_params)
     else:
-        if isinstance(data.columns, pd.MultiIndex):
-            raise TypeError('MultiIndex only supported in subplots')
-        else:
-            fun_params, traces_params, layout_params = process_params(param, kind)  # Param preprocess
+        if data is not None:
+            if isinstance(data.columns, pd.MultiIndex):
+                raise TypeError('MultiIndex only supported in subplots')
+        # else:
+        fun_params, traces_params, layout_params = process_params(param, kind)  # Param preprocess
 
-            fig = mmp_inner_plot(plot_fun, data, x, y, z, main_logo_source, proj_logo_source, fun_params, traces_params,
-                                 layout_params)  # Plot function
+        fig = mmp_inner_plot(plot_fun, data, x, y, z, main_logo_source, proj_logo_source, fun_params, traces_params,
+                             layout_params)  # Plot function
 
     if show:
         fig.show()
